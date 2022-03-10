@@ -1,196 +1,274 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'DataController.dart';
+import 'model/CollectionData.dart';
+import 'model/websitedata.dart';
 import 'newpage.dart';
 
-class DataCard extends StatelessWidget {
+class DataCard extends StatefulWidget {
   Widget logo;
-  String listname;
-  String title;
+  List listname;
+  String website;
   List data;
+  int model;
 
-  DataCard({this.logo,this.listname,this.title,this.data});
+  DataCard({this.logo, this.listname, this.website, this.data, this.model});
 
-  List zhidemadata = [
-    '好文原创榜',//rank_type=haowen&rank_id=yc
-    '好价品类榜',//rank_type=pinlei&rank_id=11
-    '好价电商榜',//rank_type=dianshang&rank_id=26
-    '海淘Top榜',//rank_type=haitao&rank_id=39
-    '好文资讯榜',//rank_type=haowen&rank_id=zx
-    '新晋好物榜',//rank_type=haowu&rank_id=hwall
-    '消费众测榜'//rank_type=haowu&rank_id=zc
-  ];
+  DataCardState createState() => DataCardState(
+      logo: this.logo,
+      listname: this.listname,
+      website: this.website,
+      data: this.data,
+      model: this.model);
+}
 
-  link(int index){
-    if(title == '少数派'){
+class DataCardState extends State<DataCard> {
+  Widget logo;
+  List listname;
+  String website;
+  List data;
+  int model;
+
+  DataCardState(
+      {this.logo, this.listname, this.website, this.data, this.model});
+
+  int selectedmenuindex = 0;
+
+  DataController _dataController = Get.put(DataController());
+
+  link(int index) {
+    if (website == '少数派') {
       return 'https://sspai.com/post/${data[index]["id"]}';
-    }else if(title == '什么值得买'){
+    } else if (website == '什么值得买') {
       return data[index]["article_url"];
-    }else {
-      return data[index].link;
+    } else if (website == '微博') {
+      //https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%23%E5%95%8A%23
+      return 'https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%23${data[index]["note"]}%23';
+    } else {
+      return 'https://sspai.com/post/${data[index]["id"]}';
     }
   }
 
-  text(int index){
-    if(title == '少数派'){
-      return Text('${data[index]["title"]}');
-    }else if(title == '什么值得买'){
-      return Text('${data[index]["article_title"]}');
-    }else {
-      return Text('${data[index].title}');
+  text(int index) {
+    if (website == '少数派') {
+      if (data[index]["title"] != null) {
+        return data[index]["title"];
+      } else {
+        return '';
+      }
+    } else if (website == '什么值得买') {
+      if (data[index]["article_title"] != null) {
+        return data[index]["article_title"];
+      } else {
+        return '';
+      }
+    } else if (website == '微博') {
+      if (data[index]["note"] != null) {
+        return data[index]["note"];
+      } else if (data[index]["topic"] != null) {
+        return data[index]["topic"];
+      } else {
+        // print(data[index]["topic"]);
+        return '';
+      }
     }
+  }
+
+  content(context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            logo,
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 250,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                FlatButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      '取消',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.grey),
+                                    )),
+                                Text(
+                                  '选择榜单',
+                                  style: TextStyle(
+                                      fontSize: 19, color: Colors.redAccent),
+                                ),
+                                FlatButton(
+                                    onPressed: () {
+                                      websitedata selectwebsite = websitedata
+                                          .fromJson(_dataController.websiteList[
+                                              _dataController.tabindex.value]);
+                                      _dataController.updateData(selectwebsite
+                                          .menu[selectedmenuindex].menuUrl);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      '确定',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.blueAccent),
+                                    )),
+                              ],
+                            ),
+                            Expanded(
+                                child: ListWheelScrollView(
+                              controller:
+                                  FixedExtentScrollController(initialItem: 0),
+                              itemExtent: 40,
+                              physics: FixedExtentScrollPhysics(
+                                parent: BouncingScrollPhysics(),
+                              ),
+                              useMagnifier: true,
+                              magnification: 1.5,
+                              children: listname.map((item) {
+                                return Container(
+                                  height: 60,
+                                  alignment: Alignment.center,
+                                  child: Text(item.menuName),
+                                );
+                              }).toList(),
+                              onSelectedItemChanged: (index) {
+                                // print(index);
+                                selectedmenuindex = index;
+                                setState(() {});
+                              },
+                            ))
+                          ],
+                        ),
+                      );
+                    });
+              },
+              child: Text(
+                listname[selectedmenuindex].menuName,
+                style: TextStyle(fontSize: 16, color: Colors.redAccent),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        data != null
+            ? Expanded(
+                child: ScrollConfiguration(
+                    behavior: MyBehavior(),
+                    child: Obx(() {
+                      return ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                              onTap: () async {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                if (prefs.getStringList('1') != null) {
+                                  bool collection = false;
+                                  for(var item in prefs.getStringList('1')){
+                                    CollectionData collectiondatas = CollectionData.fromJson(
+                                        json.decode(item));
+                                    if(collectiondatas.link == link(index)){
+                                      collection = true;
+                                    }
+                                  }
+                                  Get.to(
+                                      NewPage(
+                                        website: website,
+                                        link: link(index),
+                                        subject: text(index).toString(),
+                                        collection: collection,
+                                      ),
+                                      transition: Transition.noTransition);
+                                } else {
+                                  Get.to(
+                                      NewPage(
+                                        website: website,
+                                        link: link(index),
+                                        subject: text(index).toString(),
+                                        collection: false,
+                                      ),
+                                      transition: Transition.noTransition);
+                                }
+                              },
+                              child: Column(
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(top: 2),
+                                        child: index < 9
+                                            ? Text('  ${index + 1}.')
+                                            : Text('${index + 1}.'),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(child: Text(text(index))),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ));
+                        },
+                      );
+                    })))
+            : Container()
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-        height: 600,
-        width: 350,
-        decoration: new BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0.0, 10.0), //阴影y轴偏移量
-              blurRadius: 10, //阴影模糊程度
-              color: Color.fromRGBO(52, 52, 52, 0.15), //阴影颜色
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                logo,
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                        ),
-                        builder: (BuildContext context) {
-                          return Container(
-                            height: 250,
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
-                                  children: [
-                                    FlatButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          '取消',
-                                          style: TextStyle(
-                                              fontSize:
-                                              16,
-                                              color: Colors
-                                                  .grey),
-                                        )),
-                                    Text(
-                                      '选择榜单',
-                                      style: TextStyle(
-                                          fontSize: 19,
-                                          color: Colors
-                                              .redAccent),
-                                    ),
-                                    FlatButton(
-                                        onPressed: ()  {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          '确定',
-                                          style: TextStyle(
-                                              fontSize:
-                                              16,
-                                              color: Colors
-                                                  .blueAccent),
-                                        )),
-                                  ],
-                                ),
-                                Expanded(child: ListWheelScrollView(
-                                  controller:
-                                  FixedExtentScrollController(initialItem: 0),
-                                  itemExtent: 40,
-                                  physics: FixedExtentScrollPhysics(
-                                    parent: BouncingScrollPhysics(),
-                                  ),
-                                  useMagnifier: true,
-                                  magnification: 1.5,
-                                  children: zhidemadata.map((item) {
-                                    return Container(
-                                      height: 60,
-                                      alignment: Alignment.center,
-                                      child: Text(item),
-                                    );
-                                  }).toList(),
-                                  onSelectedItemChanged: (index) {
-                                    // print(index);
-                                  },
-                                ))
-                              ],
-                            ),
-                          );
-                        });
-                  },
-                  child: Text(
-                    listname,
-                    style: TextStyle(fontSize: 16, color: Colors.redAccent),
+    //通过公共的状态来显示卡片模式还是直接显示
+    return model == 0
+        ? Padding(
+            padding: EdgeInsets.all(20),
+            child: Container(
+              padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+              decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0.0, 10.0), //阴影y轴偏移量
+                    blurRadius: 15, //阴影模糊程度
+                    color: Color.fromRGBO(52, 52, 52, 0.15), //阴影颜色
                   ),
-                ),
-              ],
+                ],
+              ),
+              child: content(context),
             ),
-            SizedBox(height: 10,),
-            Expanded(child: Obx(() {
-              return ScrollConfiguration(
-                  behavior: MyBehavior(),
-                  child: ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(
-                              NewPage(
-                                title: title,
-                                link: link(index),
-                              ),
-                              transition: Transition.noTransition);
-                        },
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(top: 2),
-                                  child: index<9?Text('  ${index + 1}.'):Text('${index + 1}.'),
-                                ),
-                                SizedBox(width: 10,),
-                                Expanded(child: text(index))
-                              ],
-                            ),
-                            SizedBox(height: 10,),
-                          ],
-                        )
-                      );
-                    },
-                  ));
-            }))
-          ],
-        ),
-      ),
-    );
+          )
+        : Container(
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+            color: Colors.white,
+            child: content(context),
+          );
   }
 }
 

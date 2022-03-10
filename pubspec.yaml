@@ -24,10 +24,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
   dio: ^4.0.0
   get: 4.1.4
   webview_flutter: 1.0.7
+  shared_preferences: ^2.0.5
+  html: ^0.15.0
+  gbk2utf8: ^1.0.1
 
 dev_dependencies:
   flutter_test:
