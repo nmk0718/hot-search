@@ -13,12 +13,10 @@ class DataCard extends StatefulWidget {
   List listname;
   int model;
 
-  DataCard({this.logo, this.listname,this.model});
+  DataCard({this.logo, this.listname, this.model});
 
   DataCardState createState() => DataCardState(
-      logo: this.logo,
-      listname: this.listname,
-      model: this.model);
+      logo: this.logo, listname: this.listname, model: this.model);
 }
 
 class DataCardState extends State<DataCard> {
@@ -26,26 +24,25 @@ class DataCardState extends State<DataCard> {
   List listname;
   int model;
 
-  DataCardState(
-      {this.logo, this.listname,this.model});
+  DataCardState({this.logo, this.listname, this.model});
 
   int selectedmenuindex = 0;
 
   DataController _dataController = Get.put(DataController());
 
-  link(int index,data,website) {
+  link(int index, data, website) {
     if (website == '少数派') {
       return 'https://sspai.com/post/${data[index]["id"]}';
     } else if (website == '什么值得买') {
       return data[index]["article_url"];
     } else if (website == '微博') {
       return 'https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%23${data[index]["note"]}%23';
-    } else {
-      return 'https://sspai.com/post/${data[index]["id"]}';
+    } else if (website == '爱范儿') {
+      return data[index]["post_url"];
     }
   }
 
-  text(int index,data,website) {
+  text(int index, data, website) {
     if (website == '少数派') {
       return data[index]["title"];
     } else if (website == '什么值得买') {
@@ -56,11 +53,14 @@ class DataCardState extends State<DataCard> {
       } else if (data[index]["topic"] != null) {
         return data[index]["topic"];
       }
+    }else if (website == '爱范儿') {
+        return data[index].postTitle;
     }
   }
 
-  content(context,data) {
-    String website = _dataController.websiteList[_dataController.tabindex.value]['website'];
+  content(context, data) {
+    String website =
+        _dataController.websiteList[_dataController.tabindex.value]['website'];
     return Column(
       children: [
         Row(
@@ -103,7 +103,7 @@ class DataCardState extends State<DataCard> {
                                     onPressed: () {
                                       websitedata selectwebsite = websitedata
                                           .fromJson(_dataController.websiteList[
-                                      _dataController.tabindex.value]);
+                                              _dataController.tabindex.value]);
                                       _dataController.updateData(selectwebsite
                                           .menu[selectedmenuindex].menuUrl);
                                       Navigator.pop(context);
@@ -118,27 +118,27 @@ class DataCardState extends State<DataCard> {
                             ),
                             Expanded(
                                 child: ListWheelScrollView(
-                                  controller:
+                              controller:
                                   FixedExtentScrollController(initialItem: 0),
-                                  itemExtent: 40,
-                                  physics: FixedExtentScrollPhysics(
-                                    parent: BouncingScrollPhysics(),
-                                  ),
-                                  useMagnifier: true,
-                                  magnification: 1.5,
-                                  children: listname.map((item) {
-                                    return Container(
-                                      height: 60,
-                                      alignment: Alignment.center,
-                                      child: Text(item.menuName),
-                                    );
-                                  }).toList(),
-                                  onSelectedItemChanged: (index) {
-                                    // print(index);
-                                    selectedmenuindex = index;
-                                    setState(() {});
-                                  },
-                                ))
+                              itemExtent: 40,
+                              physics: FixedExtentScrollPhysics(
+                                parent: BouncingScrollPhysics(),
+                              ),
+                              useMagnifier: true,
+                              magnification: 1.5,
+                              children: listname.map((item) {
+                                return Container(
+                                  height: 60,
+                                  alignment: Alignment.center,
+                                  child: Text(item.menuName),
+                                );
+                              }).toList(),
+                              onSelectedItemChanged: (index) {
+                                // print(index);
+                                selectedmenuindex = index;
+                                setState(() {});
+                              },
+                            ))
                           ],
                         ),
                       );
@@ -156,68 +156,73 @@ class DataCardState extends State<DataCard> {
         ),
         data != null
             ? Expanded(
-            child: ScrollConfiguration(
-                behavior: MyBehavior(),
-                child: ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () async {
-                          SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                          if (prefs.getStringList('1') != null) {
-                            bool collection = false;
-                            for(var item in prefs.getStringList('1')){
-                              CollectionData collectiondatas = CollectionData.fromJson(
-                                  json.decode(item));
-                              if(collectiondatas.link == link(index,data,website)){
-                                collection = true;
+                child: ScrollConfiguration(
+                    behavior: MyBehavior(),
+                    child: ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                            onTap: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              if (prefs.getStringList('1') != null) {
+                                bool collection = false;
+                                for (var item in prefs.getStringList('1')) {
+                                  CollectionData collectiondatas =
+                                      CollectionData.fromJson(
+                                          json.decode(item));
+                                  if (collectiondatas.link ==
+                                      link(index, data, website)) {
+                                    collection = true;
+                                  }
+                                }
+                                Get.to(
+                                    NewPage(
+                                      website: website,
+                                      link: link(index, data, website),
+                                      subject:
+                                          text(index, data, website).toString(),
+                                      collection: collection,
+                                    ),
+                                    transition: Transition.noTransition);
+                              } else {
+                                Get.to(
+                                    NewPage(
+                                      website: website,
+                                      link: link(index, data, website),
+                                      subject:
+                                          text(index, data, website).toString(),
+                                      collection: false,
+                                    ),
+                                    transition: Transition.noTransition);
                               }
-                            }
-                            Get.to(
-                                NewPage(
-                                  website: website,
-                                  link: link(index,data,website),
-                                  subject: text(index,data,website).toString(),
-                                  collection: collection,
-                                ),
-                                transition: Transition.noTransition);
-                          } else {
-                            Get.to(
-                                NewPage(
-                                  website: website,
-                                  link: link(index,data,website),
-                                  subject: text(index,data,website).toString(),
-                                  collection: false,
-                                ),
-                                transition: Transition.noTransition);
-                          }
-                        },
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                            },
+                            child: Column(
                               children: [
-                                Container(
-                                  padding: EdgeInsets.only(top: 2),
-                                  child: index < 9
-                                      ? Text('  ${index + 1}.')
-                                      : Text('${index + 1}.'),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(top: 2),
+                                      child: index < 9
+                                          ? Text('  ${index + 1}.')
+                                          : Text('${index + 1}.'),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                        child:
+                                            Text(text(index, data, website))),
+                                  ],
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: 10,
                                 ),
-                                Expanded(child: Text(text(index,data,website))),
                               ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ));
-                  },
-                )))
+                            ));
+                      },
+                    )))
             : Container()
       ],
     );
@@ -226,31 +231,42 @@ class DataCardState extends State<DataCard> {
   @override
   Widget build(BuildContext context) {
     //通过公共的状态来显示卡片模式还是直接显示
-    return Obx((){
+    return Obx(() {
       List data = _dataController.hotsearchData;
-      return model == 0
-          ? Padding(
-        padding: EdgeInsets.all(20),
-        child: Container(
-          padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-          decoration: new BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(0.0, 10.0), //阴影y轴偏移量
-                blurRadius: 15, //阴影模糊程度
-                color: Color.fromRGBO(52, 52, 52, 0.15), //阴影颜色
-              ),
-            ],
-          ),
-          child:_dataController.hotsearchData == null || _dataController.hotsearchData.isEmpty?Container():content(context,data),
-        ),
-      )
-          : Container(
-        padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-        color: Colors.white,
-        child:_dataController.hotsearchData ==null || _dataController.hotsearchData.isEmpty?Container():content(context,data),
+      return Stack(
+        children: [
+          model == 0
+              ? Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+                    decoration: new BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0.0, 10.0), //阴影y轴偏移量
+                          blurRadius: 15, //阴影模糊程度
+                          color: Color.fromRGBO(52, 52, 52, 0.15), //阴影颜色
+                        ),
+                      ],
+                    ),
+                    child: content(context, data),
+                  ),
+                )
+              : Container(
+                  padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+                  color: Colors.white,
+                  child: content(context, data),
+                ),
+          data == null || data.isEmpty
+              ? Container(
+                  child: Center(
+                    child: CircularProgressIndicator(color: Color(0xFFFE1483),),
+                  ),
+                )
+              : Container()
+        ],
       );
     });
   }

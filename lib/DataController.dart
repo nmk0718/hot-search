@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hot_search/model/weibotopic.dart';
 import 'package:hot_search/model/zhidemai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'model/ifaner.dart';
 import 'model/sspai.dart';
 import 'model/websitedata.dart';
 import 'model/weibohot.dart';
@@ -107,81 +108,106 @@ class DataController extends GetxController {
       ]
     },
     {
-      "website": "吾爱破解",
-      "icon": "https://avatar.52pojie.cn/images/noavatar_middle.gif",
-      "menu": [
-        {
-          "menuName": "今日热帖",
-          "menuUrl": "https://www.52pojie.cn/misc.php?mod=ranklist&type=thread&view=heats&orderby=today"
-        },
-        {
-          "menuName": "人气热门",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        },
-        {
-          "menuName": "精品软件区",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        },
-        {
-          "menuName": "最新热门",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        },
-        {
-          "menuName": "原创发布区",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        },
-        {
-          "menuName": "吾爱破解 ‧ 最新发表",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        }
-      ]
-    },
-    {
-      "website": "虎扑",
+      "website": "爱范儿",
       "icon":
-      "https://w1.hoopchina.com.cn/channel/website/static/images/basketball-nba-logo.png",
+      "https://images.ifanr.cn/wp-content/themes/ifanr-5.0-pc/static/images/favicon.ico",
       "menu": [
-        // https://bbs.hupu.com/all-gambia  返回的html
         {
-          "menuName": "步行街热帖",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+          "menuName": "最新",
+          "menuUrl": "https://sso.ifanr.com/api/v5/wp/web-feed"
         },
         {
-          "menuName": "NBA论坛热帖",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+          "menuName": "每日早报",
+          "menuUrl": "https://sso.ifanr.com/api/v5/wp/article/?post_category=%E6%97%A9%E6%8A%A5"
         },
         {
-          "menuName": "游戏电竞热帖",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        }
+          "menuName": "AppSolution",
+          "menuUrl":
+          "https://sso.ifanr.com/api/v5/wp/article/?post_type=app"
+        },
+        {
+          "menuName": "玩物志",
+          "menuUrl":
+          "https://sso.ifanr.com/api/v5/wp/article/?post_type=coolbuy"
+        },
       ]
     },
-    {
-      "website": "豆瓣",
-      "icon": "https://img3.doubanio.com/favicon.ico",
-      "menu": [
-        {
-          "menuName": "24小时话题",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        },
-        {
-          "menuName": "冷笑话小组",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        },
-        {
-          "menuName": "一周口碑榜",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        },
-        {
-          "menuName": "上映的超过7.5分的电影",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        },
-        {
-          "menuName": "blabla",
-          "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-        }
-      ]
-    }
+    // {
+    //   "website": "吾爱破解",
+    //   "icon": "https://avatar.52pojie.cn/images/noavatar_middle.gif",
+    //   "menu": [
+    //     {
+    //       "menuName": "今日热帖",
+    //       "menuUrl": "https://www.52pojie.cn/misc.php?mod=ranklist&type=thread&view=heats&orderby=today"
+    //     },
+    //     {
+    //       "menuName": "人气热门",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "精品软件区",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "最新热门",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "原创发布区",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "吾爱破解 ‧ 最新发表",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     }
+    //   ]
+    // },
+    // {
+    //   "website": "虎扑",
+    //   "icon":
+    //   "https://w1.hoopchina.com.cn/channel/website/static/images/basketball-nba-logo.png",
+    //   "menu": [
+    //     // https://bbs.hupu.com/all-gambia  返回的html
+    //     {
+    //       "menuName": "步行街热帖",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "NBA论坛热帖",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "游戏电竞热帖",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     }
+    //   ]
+    // },
+    // {
+    //   "website": "豆瓣",
+    //   "icon": "https://img3.doubanio.com/favicon.ico",
+    //   "menu": [
+    //     {
+    //       "menuName": "24小时话题",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "冷笑话小组",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "一周口碑榜",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "上映的超过7.5分的电影",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     },
+    //     {
+    //       "menuName": "blabla",
+    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
+    //     }
+    //   ]
+    // }
   ].obs;
 
   RxList _websiteList = [].obs;
@@ -274,18 +300,32 @@ class DataController extends GetxController {
               weibotopic.fromJson(json.decode(response.toString()));
           _hotsearchData.value = datas.data.statuses;
         }
-        // Document document = parse(response.data);
-
-        // print(document.outerHtml);
-        // print(document.querySelector("th").outerHtml);
-        // print(document.getElementsByTagName("th"));
+      }else if (url.indexOf('ifanr') != -1) {
+          ifanr datas = ifanr.fromJson(json.decode(response.toString()));
+          _hotsearchData.value = datas.objects;
       }
     }
     //少数派
   }
 
+// Document document = parse(response.data);
+
+// print(document.outerHtml);
+// print(document.querySelector("th").outerHtml);
+// print(document.getElementsByTagName("th"));
+
 //zhihu 热搜
+//https://www.zhihu.com/billboard
 //全部 https://www.zhihu.com/api/v4/creators/rank/hot?domain=0&period=day
 //数码 https://www.zhihu.com/api/v4/creators/rank/hot?domain=100001&period=day
 //
+
+//百度热搜
+// https://top.baidu.com/board?tab=realtime
+
+//36氪人气榜
+//https://www.36kr.com/hot-list/catalog
+
+//it之家
+//https://m.ithome.com/rankm/
 }

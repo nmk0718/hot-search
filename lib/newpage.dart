@@ -99,7 +99,7 @@ class NewPageState extends State<NewPage> {
           isLoading
               ? Container(
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: Color(0xFFFE1483),),
                   ),
                 )
               : Container(),
