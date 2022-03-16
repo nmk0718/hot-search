@@ -3,8 +3,11 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:hot_search/model/weibotopic.dart';
 import 'package:hot_search/model/zhidemai.dart';
+import 'package:html/dom.dart';
+import 'package:html/parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'model/ifaner.dart';
+import 'model/ithome.dart';
 import 'model/sspai.dart';
 import 'model/websitedata.dart';
 import 'model/weibohot.dart';
@@ -110,7 +113,7 @@ class DataController extends GetxController {
     {
       "website": "爱范儿",
       "icon":
-      "https://images.ifanr.cn/wp-content/themes/ifanr-5.0-pc/static/images/favicon.ico",
+          "https://images.ifanr.cn/wp-content/themes/ifanr-5.0-pc/static/images/favicon.ico",
       "menu": [
         {
           "menuName": "最新",
@@ -118,18 +121,25 @@ class DataController extends GetxController {
         },
         {
           "menuName": "每日早报",
-          "menuUrl": "https://sso.ifanr.com/api/v5/wp/article/?post_category=%E6%97%A9%E6%8A%A5"
+          "menuUrl":
+              "https://sso.ifanr.com/api/v5/wp/article/?post_category=%E6%97%A9%E6%8A%A5"
         },
         {
           "menuName": "AppSolution",
-          "menuUrl":
-          "https://sso.ifanr.com/api/v5/wp/article/?post_type=app"
+          "menuUrl": "https://sso.ifanr.com/api/v5/wp/article/?post_type=app"
         },
         {
           "menuName": "玩物志",
           "menuUrl":
-          "https://sso.ifanr.com/api/v5/wp/article/?post_type=coolbuy"
+              "https://sso.ifanr.com/api/v5/wp/article/?post_type=coolbuy"
         },
+      ]
+    },
+    {
+      "website": "IT之家",
+      "icon": "https://img.ithome.com/m/images/logo.png",
+      "menu": [
+        {"menuName": "日榜", "menuUrl": "https://m.ithome.com/rankm/"},
       ]
     },
     // {
@@ -300,19 +310,24 @@ class DataController extends GetxController {
               weibotopic.fromJson(json.decode(response.toString()));
           _hotsearchData.value = datas.data.statuses;
         }
-      }else if (url.indexOf('ifanr') != -1) {
-          ifanr datas = ifanr.fromJson(json.decode(response.toString()));
-          _hotsearchData.value = datas.objects;
+      } else if (url.indexOf('ifanr') != -1) {
+        ifanr datas = ifanr.fromJson(json.decode(response.toString()));
+        _hotsearchData.value = datas.objects;
+      } else if (url.indexOf('ithome') != -1) {
+        Document document = parse(response.data);
+        List<Element> links = document.querySelectorAll('div.placeholder > a');
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in links) {
+          linkMap.add({
+            'title': link.querySelector('p.plc-title').text,
+            'link': link.attributes['href'],
+          });
+        }
+        _hotsearchData.value = linkMap;
       }
     }
     //少数派
   }
-
-// Document document = parse(response.data);
-
-// print(document.outerHtml);
-// print(document.querySelector("th").outerHtml);
-// print(document.getElementsByTagName("th"));
 
 //zhihu 热搜
 //https://www.zhihu.com/billboard
@@ -325,7 +340,9 @@ class DataController extends GetxController {
 
 //36氪人气榜
 //https://www.36kr.com/hot-list/catalog
-
-//it之家
-//https://m.ithome.com/rankm/
 }
+
+
+//flutter解析接口返回的html
+//https://blog.csdn.net/zheng0906/article/details/105689693
+//https://itnext.io/write-your-first-web-scraper-in-dart-243c7bb4d05

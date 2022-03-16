@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'DataController.dart';
 import 'model/CollectionData.dart';
+import 'model/ithome.dart';
 import 'model/websitedata.dart';
 import 'newpage.dart';
 
@@ -39,6 +40,8 @@ class DataCardState extends State<DataCard> {
       return 'https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%23${data[index]["note"]}%23';
     } else if (website == '爱范儿') {
       return data[index]["post_url"];
+    }else if (website == 'IT之家') {
+      return data[index]['link'];
     }
   }
 
@@ -55,6 +58,8 @@ class DataCardState extends State<DataCard> {
       }
     }else if (website == '爱范儿') {
         return data[index].postTitle;
+    }else if (website == 'IT之家') {
+      return data[index]['title'];
     }
   }
 
