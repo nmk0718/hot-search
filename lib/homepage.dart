@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   DataController _dataController = Get.put(DataController());
+  PageController _pageController = PageController(viewportFraction: 0.9999);
 
   @override
   void initState() {
@@ -38,7 +39,6 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
             website.icon,
             height: 35,
             width: 35,
-            color: website.website == '虎扑' ? Colors.red : null,
           ),
           Text(
             '\r${website.website}',
@@ -81,13 +81,11 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
     List<Widget> Cards = [];
     for (int i = 0; i < _dataController.websiteList.length; i++) {
       websitedata website =
-          websitedata.fromJson(_dataController.websiteList[i]);
+      websitedata.fromJson(_dataController.websiteList[i]);
       Cards.add(
         DataCard(
           logo: logo(website),
           listname: website.menu,
-          website: website.website,
-          data: _dataController.hotsearchData,
           model: _dataController.model.value,
         ),
       );
@@ -103,22 +101,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
           length: _dataController.websiteList.length,
           child: Builder(
             builder: (BuildContext context) {
-
-              TabController tabController;
-              tabController = DefaultTabController.of(context);
-              tabController.addListener(() {
-                //   //解决对TabController的监听在点击Tab后会执行两次和监听滑动
-                if (tabController.index.toDouble() ==
-                    tabController.animation.value) {
-                  print(tabController.index);
-                  _dataController.updatetabindex(tabController.index);
-                  //滑动后获取到weblist中的数据
-                  websitedata website = websitedata.fromJson(
-                      _dataController.websiteList[tabController.index]);
-                  //默认滑动后获取第一个子菜单的数据
-                  _dataController.updateData(website.menu[0].menuUrl);
-                }
-              });
+              TabController tabController = DefaultTabController.of(context);
               return Scaffold(
                   appBar: AppBar(
                     elevation: 2,
@@ -146,8 +129,7 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                                 transition: Transition.noTransition);
                             if(result !=null){
                               websitedata websites = websitedata.fromJson(
-                                  _dataController.websiteList[0]);
-                              print(websites.menu[0].menuUrl);
+                                  _dataController.websiteList[tabController.index]);
                               _dataController.updateData(websites.menu[0].menuUrl);
                             }
                           },
@@ -163,11 +145,27 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                           unselectedLabelColor: Colors.black54,
                           isScrollable: true,
                           indicatorSize: TabBarIndicatorSize.label,
-                          tabs: TabList()),
+                          tabs: TabList(),
+                        onTap: (index){
+                            _pageController.jumpToPage(index);
+
+                        },
+                      ),
                     ),
                   ),
-                  body: TabBarView(
+                  body: PageView(
+                    controller: _pageController,
                     children: CardList(),
+                    onPageChanged: (index){
+                      _dataController.hotsearchData.clear();
+                      _dataController.updatetabindex(index);
+                      //滑动后获取到weblist中的数据
+                      websitedata website = websitedata.fromJson(
+                          _dataController.websiteList[index]);
+                      //默认滑动后获取第一个子菜单的数据
+                      _dataController.updateData(website.menu[0].menuUrl);
+                     tabController.animateTo(index);
+                    },
                   ));
             },
           ));
