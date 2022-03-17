@@ -80,14 +80,8 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
   List<Widget> CardList() {
     List<Widget> Cards = [];
     for (int i = 0; i < _dataController.websiteList.length; i++) {
-      websitedata website =
-      websitedata.fromJson(_dataController.websiteList[i]);
       Cards.add(
-        DataCard(
-          logo: logo(website),
-          listname: website.menu,
-          model: _dataController.model.value,
-        ),
+        DataCard(),
       );
     }
     return Cards;
@@ -124,14 +118,16 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                                   color: Color(0xFFFE1483), fontSize: 30),
                             ),
                           ),
-                          onTap: () async {
-                            var result = await Get.to(Setting(),
+                          onTap: () {
+                            Get.to(Setting(),
                                 transition: Transition.noTransition);
-                            if(result !=null){
-                              websitedata websites = websitedata.fromJson(
-                                  _dataController.websiteList[tabController.index]);
-                              _dataController.updateData(websites.menu[0].menuUrl);
-                            }
+                            // var result = await Get.to(Setting(),
+                            //     transition: Transition.noTransition);
+                            // if(result !=null){
+                            //   websitedata websites = websitedata.fromJson(
+                            //       _dataController.websiteList[tabController.index]);
+                            //   _dataController.updateData(websites.menu[0].menuUrl);
+                            // }
                           },
                         );
                       }),

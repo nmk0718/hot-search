@@ -28,9 +28,10 @@ class ChangeSytleState extends State<ChangeSytle> {
           backgroundColor: Colors.white,
         ),
         body: Obx(() {
+          int modle =_dataController.model.value;
           return Column(
             children: [
-              _dataController.model.value == 0
+              modle== 0
                   ? Padding(padding: EdgeInsets.only(top: 20),child: Container(
                 padding: EdgeInsets.only(left: 15, right: 15, top: 10),
                 height: 550,
@@ -57,17 +58,17 @@ class ChangeSytleState extends State<ChangeSytle> {
                     ),
               RadioListTile(
                   value: 0,
-                  groupValue: _dataController.model.value,
+                  groupValue: modle,
                   title: Text('卡片模式'),
-                  selected: _dataController.model.value == 0,
+                  selected: modle == 0,
                   onChanged: (value) {
                     _dataController.updatemodel(value);
                   }),
               RadioListTile(
                   value: 1,
-                  groupValue: _dataController.model.value,
+                  groupValue: modle,
                   title: Text('直观模式'),
-                  selected: _dataController.model.value == 1,
+                  selected: modle == 1,
                   onChanged: (value) {
                     _dataController.updatemodel(value);
                   }),

@@ -45,16 +45,18 @@ class Collection extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: EdgeInsets.only(top: 2),
-                            child: index < 9
-                                ? Text('  ${index + 1}.')
-                                : Text('${index + 1}.'),
-                          ),
-                          SizedBox(
-                            width: 10,
+                            width: 20,
+                            child: Text(
+                              '${index + 1}',
+                              style: TextStyle(height: 1.5),
+                            ),
                           ),
                           Expanded(
-                              child: Text(data[index].subject))
+                            child: Text(
+                                data[index].subject,
+                              style: TextStyle(height: 1.5),
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(

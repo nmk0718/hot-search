@@ -1,15 +1,15 @@
 class ifanr {
   Meta meta;
-  List<Objects> objects;
+  List<ifanerObjects> objects;
 
   ifanr({this.meta, this.objects});
 
   ifanr.fromJson(Map<String, dynamic> json) {
     meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
     if (json['objects'] != null) {
-      objects = <Objects>[];
+      objects = <ifanerObjects>[];
       json['objects'].forEach((v) {
-        objects.add(new Objects.fromJson(v));
+        objects.add(new ifanerObjects.fromJson(v));
       });
     }
   }
@@ -54,7 +54,7 @@ class Meta {
   }
 }
 
-class Objects {
+class ifanerObjects {
   String categoryUri;
   int createdAt;
   String createdAtFormat;
@@ -69,7 +69,7 @@ class Objects {
   String postType;
   String postUrl;
 
-  Objects(
+  ifanerObjects(
       {this.categoryUri,
         this.createdAt,
         this.createdAtFormat,
@@ -84,7 +84,7 @@ class Objects {
         this.postType,
         this.postUrl});
 
-  Objects.fromJson(Map<String, dynamic> json) {
+  ifanerObjects.fromJson(Map<String, dynamic> json) {
     categoryUri = json['category_uri'];
     createdAt = json['created_at'];
     createdAtFormat = json['created_at_format'];

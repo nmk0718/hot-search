@@ -11,6 +11,7 @@ import 'model/ithome.dart';
 import 'model/sspai.dart';
 import 'model/websitedata.dart';
 import 'model/weibohot.dart';
+import 'model/zhihu.dart';
 
 class DataController extends GetxController {
   @override
@@ -140,6 +141,56 @@ class DataController extends GetxController {
       "icon": "https://img.ithome.com/m/images/logo.png",
       "menu": [
         {"menuName": "日榜", "menuUrl": "https://m.ithome.com/rankm/"},
+      ]
+    },
+    {
+      "website": "百度",
+      "icon": "https://www.baidu.com/favicon.ico",
+      "menu": [
+        {
+          "menuName": "热搜榜",
+          "menuUrl": "https://top.baidu.com/board?tab=realtime"
+        },
+        {"menuName": "小说", "menuUrl": "https://top.baidu.com/board?tab=novel"},
+        {"menuName": "电影", "menuUrl": "https://top.baidu.com/board?tab=movie"},
+      ]
+    },
+    {
+      "website": "36氪",
+      "icon": "https://www.36kr.com/favicon.ico",
+      "menu": [
+        {"menuName": "人气榜", "menuUrl": "https://www.36kr.com/hot-list/catalog"},
+      ]
+    },
+    {
+      "website": "知乎",
+      "icon": "https://static.zhihu.com/heifetz/favicon.ico",
+      "menu": [
+        {
+          "menuName": "时榜",
+          "menuUrl":
+              "https://www.zhihu.com/api/v4/creators/rank/hot?domain=0&period=hour"
+        },
+        {
+          "menuName": "日榜",
+          "menuUrl":
+              "https://www.zhihu.com/api/v4/creators/rank/hot?domain=0&period=day"
+        },
+        {
+          "menuName": "数码",
+          "menuUrl":
+              "https://www.zhihu.com/api/v4/creators/rank/hot?domain=100001&period=day"
+        },
+        {
+          "menuName": "科技",
+          "menuUrl":
+              "https://www.zhihu.com/api/v4/creators/rank/hot?domain=100002&period=day"
+        },
+        {
+          "menuName": "互联网",
+          "menuUrl":
+              "https://www.zhihu.com/api/v4/creators/rank/hot?domain=100003&period=day"
+        },
       ]
     },
     // {
@@ -286,7 +337,8 @@ class DataController extends GetxController {
 
         _hotsearchData.value = datas.data;
         //什么值得买
-      } else if (url.indexOf('smzdm') != -1) {
+      }
+      if (url.indexOf('smzdm') != -1) {
         zhidemai datas = zhidemai.fromJson(json.decode(response.toString()));
         List zhangdama = [];
         for (int i = 0; i < datas.data.list.length; i++) {
@@ -301,7 +353,8 @@ class DataController extends GetxController {
         }
         _hotsearchData.value = zhangdama;
         //微博
-      } else if (url.indexOf('weibo') != -1) {
+      }
+      if (url.indexOf('weibo') != -1) {
         if (url.indexOf('hot_band') != -1) {
           weibohot datas = weibohot.fromJson(json.decode(response.toString()));
           _hotsearchData.value = datas.data.bandList;
@@ -310,10 +363,12 @@ class DataController extends GetxController {
               weibotopic.fromJson(json.decode(response.toString()));
           _hotsearchData.value = datas.data.statuses;
         }
-      } else if (url.indexOf('ifanr') != -1) {
+      }
+      if (url.indexOf('ifanr') != -1) {
         ifanr datas = ifanr.fromJson(json.decode(response.toString()));
         _hotsearchData.value = datas.objects;
-      } else if (url.indexOf('ithome') != -1) {
+      }
+      if (url.indexOf('ithome') != -1) {
         Document document = parse(response.data);
         List<Element> links = document.querySelectorAll('div.placeholder > a');
         List<Map<String, dynamic>> linkMap = [];
@@ -325,23 +380,38 @@ class DataController extends GetxController {
         }
         _hotsearchData.value = linkMap;
       }
+      if (url.indexOf('baidu') != -1) {
+        Document document = parse(response.data);
+        List<Element> links =
+            document.querySelectorAll('div.content_1YWBm > a');
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in links) {
+          linkMap.add({
+            'title': link.querySelector('div.c-single-text-ellipsis').text,
+            'link': link.attributes['href'],
+          });
+        }
+        _hotsearchData.value = linkMap;
+      }
+      if (url.indexOf('36kr') != -1) {
+        Document document = parse(response.data);
+        List<Element> links = document.querySelectorAll('p.title-wrapper > a');
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in links) {
+          linkMap.add({
+            'title': link.text,
+            'link': 'https://www.36kr.com' + link.attributes['href'],
+          });
+        }
+        _hotsearchData.value = linkMap;
+      }
+      if (url.indexOf('zhihu') != -1) {
+        zhihu datas = zhihu.fromJson(json.decode(response.toString()));
+        _hotsearchData.value = datas.data;
+      }
     }
-    //少数派
   }
-
-//zhihu 热搜
-//https://www.zhihu.com/billboard
-//全部 https://www.zhihu.com/api/v4/creators/rank/hot?domain=0&period=day
-//数码 https://www.zhihu.com/api/v4/creators/rank/hot?domain=100001&period=day
-//
-
-//百度热搜
-// https://top.baidu.com/board?tab=realtime
-
-//36氪人气榜
-//https://www.36kr.com/hot-list/catalog
 }
-
 
 //flutter解析接口返回的html
 //https://blog.csdn.net/zheng0906/article/details/105689693

@@ -1,32 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'DataController.dart';
 import 'model/CollectionData.dart';
-import 'model/ithome.dart';
 import 'model/websitedata.dart';
 import 'newpage.dart';
 
 class DataCard extends StatefulWidget {
-  Widget logo;
-  List listname;
-  int model;
-
-  DataCard({this.logo, this.listname, this.model});
-
-  DataCardState createState() => DataCardState(
-      logo: this.logo, listname: this.listname, model: this.model);
+  DataCardState createState() => DataCardState();
 }
 
 class DataCardState extends State<DataCard> {
-  Widget logo;
-  List listname;
-  int model;
-
-  DataCardState({this.logo, this.listname, this.model});
-
   int selectedmenuindex = 0;
 
   DataController _dataController = Get.put(DataController());
@@ -34,44 +22,100 @@ class DataCardState extends State<DataCard> {
   link(int index, data, website) {
     if (website == '少数派') {
       return 'https://sspai.com/post/${data[index]["id"]}';
-    } else if (website == '什么值得买') {
-      return data[index]["article_url"];
-    } else if (website == '微博') {
-      return 'https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%23${data[index]["note"]}%23';
-    } else if (website == '爱范儿') {
-      return data[index]["post_url"];
-    }else if (website == 'IT之家') {
-      return data[index]['link'];
     }
+    if (website == '什么值得买') {
+      return data[index]["article_url"];
+    }
+    if (website == '微博') {
+      return 'https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%23${data[index]["note"]}%23';
+    }
+    if (website == '爱范儿') {
+      return data[index].postUrl;
+    }
+    if (website == '知乎') {
+      return data[index].question.url;
+    }
+    //接口返回是html的 统一使用同一种渲染
+    return data[index]['link'];
   }
 
   text(int index, data, website) {
     if (website == '少数派') {
       return data[index]["title"];
-    } else if (website == '什么值得买') {
+    }
+    if (website == '什么值得买') {
       return data[index]['article_title'];
-    } else if (website == '微博') {
+    }
+    if (website == '微博') {
       if (data[index]["note"] != null) {
         return data[index]["note"];
       } else if (data[index]["topic"] != null) {
         return data[index]["topic"];
       }
-    }else if (website == '爱范儿') {
-        return data[index].postTitle;
-    }else if (website == 'IT之家') {
-      return data[index]['title'];
     }
+    if (website == '爱范儿') {
+      return data[index].postTitle;
+    }
+    if (website == '知乎') {
+      return data[index].question.title;
+    }
+    //接口返回是html的 统一使用同一种渲染
+    return data[index]['title'];
+  }
+
+  Widget logo(website) {
+    if (website.website == '什么值得买') {
+      return Image.network(
+        'https://res.smzdm.com/resources/public/img/pc_global/logo.png',
+        width: 100,
+        height: 30,
+      );
+    }
+    if (website.website == '微博') {
+      return Row(
+        children: [
+          Image.network(
+            website.icon,
+            height: 35,
+            width: 35,
+          ),
+          Text(
+            '\r${website.website}',
+            style: TextStyle(fontSize: 17),
+          ),
+        ],
+      );
+    }
+    return Row(
+      children: [
+        Image.network(
+          website.icon,
+          height: 25,
+          width: 25,
+          color: website == '虎扑' ? Colors.red : null,
+        ),
+        Text(
+          '\r\r${website.website}',
+          style: TextStyle(fontSize: 17),
+        ),
+      ],
+    );
   }
 
   content(context, data) {
-    String website =
-        _dataController.websiteList[_dataController.tabindex.value]['website'];
+    var selecteddata =
+        _dataController.websiteList[_dataController.tabindex.value];
+    websitedata selectwebsite = websitedata
+        .fromJson(selecteddata);
+    String website = selecteddata['website'];
+    var menu = selectwebsite.menu;
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            logo,
+            logo(selectwebsite),
             GestureDetector(
               onTap: () {
                 showModalBottomSheet(
@@ -106,9 +150,6 @@ class DataCardState extends State<DataCard> {
                                 ),
                                 FlatButton(
                                     onPressed: () {
-                                      websitedata selectwebsite = websitedata
-                                          .fromJson(_dataController.websiteList[
-                                              _dataController.tabindex.value]);
                                       _dataController.updateData(selectwebsite
                                           .menu[selectedmenuindex].menuUrl);
                                       Navigator.pop(context);
@@ -131,7 +172,7 @@ class DataCardState extends State<DataCard> {
                               ),
                               useMagnifier: true,
                               magnification: 1.5,
-                              children: listname.map((item) {
+                              children: menu.map((item) {
                                 return Container(
                                   height: 60,
                                   alignment: Alignment.center,
@@ -150,7 +191,7 @@ class DataCardState extends State<DataCard> {
                     });
               },
               child: Text(
-                listname[selectedmenuindex].menuName,
+                menu[selectedmenuindex].menuName,
                 style: TextStyle(fontSize: 16, color: Colors.redAccent),
               ),
             ),
@@ -208,17 +249,18 @@ class DataCardState extends State<DataCard> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.only(top: 2),
-                                      child: index < 9
-                                          ? Text('  ${index + 1}.')
-                                          : Text('${index + 1}.'),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
+                                      width: 20,
+                                      child: Text(
+                                        '${index + 1}',
+                                        style: TextStyle(height: 1.5),
+                                      ),
                                     ),
                                     Expanded(
-                                        child:
-                                            Text(text(index, data, website))),
+                                      child: Text(
+                                        text(index, data, website),
+                                        style: TextStyle(height: 1.5),
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(
@@ -240,7 +282,7 @@ class DataCardState extends State<DataCard> {
       List data = _dataController.hotsearchData;
       return Stack(
         children: [
-          model == 0
+          _dataController.model.value == 0
               ? Padding(
                   padding: EdgeInsets.all(20),
                   child: Container(
@@ -267,7 +309,9 @@ class DataCardState extends State<DataCard> {
           data == null || data.isEmpty
               ? Container(
                   child: Center(
-                    child: CircularProgressIndicator(color: Color(0xFFFE1483),),
+                    child: CircularProgressIndicator(
+                      color: Color(0xFFFE1483),
+                    ),
                   ),
                 )
               : Container()
