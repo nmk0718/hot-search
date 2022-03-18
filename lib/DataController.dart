@@ -7,7 +7,6 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'model/ifaner.dart';
-import 'model/ithome.dart';
 import 'model/sspai.dart';
 import 'model/websitedata.dart';
 import 'model/weibohot.dart';
@@ -193,82 +192,43 @@ class DataController extends GetxController {
         },
       ]
     },
-    // {
-    //   "website": "吾爱破解",
-    //   "icon": "https://avatar.52pojie.cn/images/noavatar_middle.gif",
-    //   "menu": [
-    //     {
-    //       "menuName": "今日热帖",
-    //       "menuUrl": "https://www.52pojie.cn/misc.php?mod=ranklist&type=thread&view=heats&orderby=today"
-    //     },
-    //     {
-    //       "menuName": "人气热门",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "精品软件区",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "最新热门",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "原创发布区",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "吾爱破解 ‧ 最新发表",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     }
-    //   ]
-    // },
-    // {
-    //   "website": "虎扑",
-    //   "icon":
-    //   "https://w1.hoopchina.com.cn/channel/website/static/images/basketball-nba-logo.png",
-    //   "menu": [
-    //     // https://bbs.hupu.com/all-gambia  返回的html
-    //     {
-    //       "menuName": "步行街热帖",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "NBA论坛热帖",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "游戏电竞热帖",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     }
-    //   ]
-    // },
-    // {
-    //   "website": "豆瓣",
-    //   "icon": "https://img3.doubanio.com/favicon.ico",
-    //   "menu": [
-    //     {
-    //       "menuName": "24小时话题",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "冷笑话小组",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "一周口碑榜",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "上映的超过7.5分的电影",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     },
-    //     {
-    //       "menuName": "blabla",
-    //       "menuUrl": "https://sspai.com/api/v1/article/tag/page/get?limit=20&offset=0&tag=热门文章&released=false"
-    //     }
-    //   ]
-    // }
+    {
+      "website": "吾爱破解",
+      "icon": "https://avatar.52pojie.cn/images/noavatar_middle.gif",
+      "menu": [
+        {
+          "menuName": "今日热帖",
+          "menuUrl":
+              "https://www.52pojie.cn/misc.php?mod=ranklist&type=thread&view=heats&orderby=today"
+        },
+      ]
+    },
+    {
+      "website": "虎扑",
+      "icon":
+          "https://w1.hoopchina.com.cn/channel/website/static/images/basketball-nba-logo.png",
+      "menu": [
+        {"menuName": "步行街热帖", "menuUrl": "https://bbs.hupu.com/all-gambia"},
+        {"menuName": "NBA热帖", "menuUrl": "https://bbs.hupu.com/all-nba"},
+        {"menuName": "电竞热帖", "menuUrl": "https://bbs.hupu.com/all-gg"}
+      ]
+    },
+    {
+      "website": "小红书",
+      "icon": "https://ci.xiaohongshu.com/49fd555a-b46b-49fd-b5a5-053fb4a536dc",
+      "menu": [
+        {"menuName": "社区精选", "menuUrl": "https://www.xiaohongshu.com/explore"},
+      ]
+    },
+    {
+      "website": "豆瓣",
+      "icon": "https://img3.doubanio.com/favicon.ico",
+      "menu": [
+        {"menuName": "讨论精选", "menuUrl": "https://www.douban.com/group/explore"},
+        {"menuName": "热门话题", "menuUrl": "https://www.douban.com"},
+        {"menuName": "24小时话题", "menuUrl": "https://www.douban.com/gallery"},
+      ]
+    }
   ].obs;
 
   RxList _websiteList = [].obs;
@@ -334,39 +294,70 @@ class DataController extends GetxController {
     if (response.statusCode == 200) {
       if (url.indexOf('sspai') != -1) {
         sspai datas = sspai.fromJson(json.decode(response.toString()));
-
-        _hotsearchData.value = datas.data;
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in datas.data) {
+          linkMap.add({
+            'title': link["title"],
+            'link': 'https://sspai.com/post/${link["id"]}',
+          });
+        }
+        _hotsearchData.value = linkMap;
         //什么值得买
       }
       if (url.indexOf('smzdm') != -1) {
         zhidemai datas = zhidemai.fromJson(json.decode(response.toString()));
-        List zhangdama = [];
-        for (int i = 0; i < datas.data.list.length; i++) {
-          for (int j = 0; j < 2; j++) {
-            if (datas.data.list[i][j] == null ||
-                datas.data.list[i][j].isEmpty) {
-              // print(datas.data.list[i][j]);
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in datas.data.list) {
+          for (int i = 0; i < 2; i++) {
+            if (link[i] == null || link[i].isEmpty) {
+              // (datas.data.list[i][j]);
             } else {
-              zhangdama.add(datas.data.list[i][j]);
+              linkMap.add({
+                'title': link[i]["article_title"],
+                'link': link[i]['article_url'],
+              });
             }
           }
         }
-        _hotsearchData.value = zhangdama;
+        _hotsearchData.value = linkMap;
         //微博
       }
       if (url.indexOf('weibo') != -1) {
         if (url.indexOf('hot_band') != -1) {
           weibohot datas = weibohot.fromJson(json.decode(response.toString()));
-          _hotsearchData.value = datas.data.bandList;
+          List<Map<String, dynamic>> linkMap = [];
+          for (var link in datas.data.bandList) {
+            linkMap.add({
+              'title': link["note"],
+              'link':
+                  'https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%23${link["note"]}%23',
+            });
+          }
+          _hotsearchData.value = linkMap;
         } else {
           weibotopic datas =
               weibotopic.fromJson(json.decode(response.toString()));
-          _hotsearchData.value = datas.data.statuses;
+          List<Map<String, dynamic>> linkMap = [];
+          for (var link in datas.data.statuses) {
+            linkMap.add({
+              'title': link["note"],
+              'link':
+                  'https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%23${link["note"]}%23',
+            });
+          }
+          _hotsearchData.value = linkMap;
         }
       }
       if (url.indexOf('ifanr') != -1) {
         ifanr datas = ifanr.fromJson(json.decode(response.toString()));
-        _hotsearchData.value = datas.objects;
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in datas.objects) {
+          linkMap.add({
+            'title': link.postTitle,
+            'link': link.postUrl,
+          });
+        }
+        _hotsearchData.value = linkMap;
       }
       if (url.indexOf('ithome') != -1) {
         Document document = parse(response.data);
@@ -407,7 +398,69 @@ class DataController extends GetxController {
       }
       if (url.indexOf('zhihu') != -1) {
         zhihu datas = zhihu.fromJson(json.decode(response.toString()));
-        _hotsearchData.value = datas.data;
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in datas.data) {
+          linkMap.add({
+            'title': link.question.title,
+            'link': link.question.url,
+          });
+        }
+        _hotsearchData.value = linkMap;
+      }
+      if (url.indexOf('52pojie') != -1) {
+        Document document = parse(response.data);
+        List<Element> links = document.querySelectorAll('th > a');
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in links) {
+          linkMap.add({
+            'title': link.text,
+            'link': 'https://www.52pojie.cn/' + link.attributes['href'],
+          });
+        }
+        _hotsearchData.value = linkMap;
+      }
+      if (url.indexOf('hupu') != -1) {
+        Document document = parse(response.data);
+        List<Element> links = document.querySelectorAll('div.t-info > a');
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in links) {
+          linkMap.add({
+            'title': link.text,
+            'link': 'https://m.hupu.com/bbs' + link.attributes['href'],
+          });
+        }
+        _hotsearchData.value = linkMap;
+      }
+      if (url.indexOf('xiaohongshu') != -1) {
+        Document document = parse(response.data);
+        List<Element> links = document.querySelectorAll('div.note-info > a');
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in links) {
+          linkMap.add({
+            'title': link.text,
+            'link': 'https://www.xiaohongshu.com' + link.attributes['href'],
+          });
+        }
+        _hotsearchData.value = linkMap;
+      }
+      if (url.indexOf('douban') != -1) {
+        Document document = parse(response.data);
+        List<Element> links;
+        if (url.indexOf('gallery') != -1) {
+          links = document.querySelectorAll('ul.trend > li > a');
+        } else if (url.indexOf('explore') != -1) {
+          links = document.querySelectorAll('div.bd > h3 > a');
+        } else {
+          links = document.querySelectorAll('li.rec_topics > a');
+        }
+        List<Map<String, dynamic>> linkMap = [];
+        for (var link in links) {
+          linkMap.add({
+            'title': link.text,
+            'link': link.attributes['href'],
+          });
+        }
+        _hotsearchData.value = linkMap;
       }
     }
   }

@@ -19,49 +19,6 @@ class DataCardState extends State<DataCard> {
 
   DataController _dataController = Get.put(DataController());
 
-  link(int index, data, website) {
-    if (website == '少数派') {
-      return 'https://sspai.com/post/${data[index]["id"]}';
-    }
-    if (website == '什么值得买') {
-      return data[index]["article_url"];
-    }
-    if (website == '微博') {
-      return 'https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%23${data[index]["note"]}%23';
-    }
-    if (website == '爱范儿') {
-      return data[index].postUrl;
-    }
-    if (website == '知乎') {
-      return data[index].question.url;
-    }
-    //接口返回是html的 统一使用同一种渲染
-    return data[index]['link'];
-  }
-
-  text(int index, data, website) {
-    if (website == '少数派') {
-      return data[index]["title"];
-    }
-    if (website == '什么值得买') {
-      return data[index]['article_title'];
-    }
-    if (website == '微博') {
-      if (data[index]["note"] != null) {
-        return data[index]["note"];
-      } else if (data[index]["topic"] != null) {
-        return data[index]["topic"];
-      }
-    }
-    if (website == '爱范儿') {
-      return data[index].postTitle;
-    }
-    if (website == '知乎') {
-      return data[index].question.title;
-    }
-    //接口返回是html的 统一使用同一种渲染
-    return data[index]['title'];
-  }
 
   Widget logo(website) {
     if (website.website == '什么值得买') {
@@ -92,7 +49,7 @@ class DataCardState extends State<DataCard> {
           website.icon,
           height: 25,
           width: 25,
-          color: website == '虎扑' ? Colors.red : null,
+          color: website.website == '虎扑' ? Colors.red : null,
         ),
         Text(
           '\r\r${website.website}',
@@ -105,8 +62,7 @@ class DataCardState extends State<DataCard> {
   content(context, data) {
     var selecteddata =
         _dataController.websiteList[_dataController.tabindex.value];
-    websitedata selectwebsite = websitedata
-        .fromJson(selecteddata);
+    websitedata selectwebsite = websitedata.fromJson(selecteddata);
     String website = selecteddata['website'];
     var menu = selectwebsite.menu;
 
@@ -180,7 +136,7 @@ class DataCardState extends State<DataCard> {
                                 );
                               }).toList(),
                               onSelectedItemChanged: (index) {
-                                // print(index);
+                                // (index);
                                 selectedmenuindex = index;
                                 setState(() {});
                               },
@@ -218,16 +174,15 @@ class DataCardState extends State<DataCard> {
                                       CollectionData.fromJson(
                                           json.decode(item));
                                   if (collectiondatas.link ==
-                                      link(index, data, website)) {
+                                      data[index]['link']) {
                                     collection = true;
                                   }
                                 }
                                 Get.to(
                                     NewPage(
                                       website: website,
-                                      link: link(index, data, website),
-                                      subject:
-                                          text(index, data, website).toString(),
+                                      link: data[index]['link'],
+                                      subject: data[index]['title'],
                                       collection: collection,
                                     ),
                                     transition: Transition.noTransition);
@@ -235,9 +190,8 @@ class DataCardState extends State<DataCard> {
                                 Get.to(
                                     NewPage(
                                       website: website,
-                                      link: link(index, data, website),
-                                      subject:
-                                          text(index, data, website).toString(),
+                                      link: data[index]['link'],
+                                      subject: data[index]['title'],
                                       collection: false,
                                     ),
                                     transition: Transition.noTransition);
@@ -257,7 +211,7 @@ class DataCardState extends State<DataCard> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        text(index, data, website),
+                                        data[index]['title'],
                                         style: TextStyle(height: 1.5),
                                       ),
                                     ),

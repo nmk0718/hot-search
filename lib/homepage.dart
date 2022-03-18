@@ -25,45 +25,6 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
     super.dispose();
   }
 
-  Widget logo(website) {
-    if (website.website == '什么值得买') {
-      return Image.network(
-        'https://res.smzdm.com/resources/public/img/pc_global/logo.png',
-        width: 100,
-        height: 30,
-      );
-    } else if (website.website == '微博') {
-      return Row(
-        children: [
-          Image.network(
-            website.icon,
-            height: 35,
-            width: 35,
-          ),
-          Text(
-            '\r${website.website}',
-            style: TextStyle(fontSize: 17),
-          ),
-        ],
-      );
-    } else {
-      return Row(
-        children: [
-          Image.network(
-            website.icon,
-            height: 25,
-            width: 25,
-            color: website.website == '虎扑' ? Colors.red : null,
-          ),
-          Text(
-            '\r\r${website.website}',
-            style: TextStyle(fontSize: 17),
-          ),
-        ],
-      );
-    }
-  }
-
   List<Tab> TabList() {
     List<Tab> Tabs = <Tab>[];
     for (var item in _dataController.websiteList) {
