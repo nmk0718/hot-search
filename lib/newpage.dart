@@ -78,18 +78,27 @@ class NewPageState extends State<NewPage> {
       body: Stack(
         children: [
           WebView(
+            //要显示的url
             initialUrl: link,
+            //JS执行模式 默认是不调用
             javascriptMode: JavascriptMode.unrestricted,
+            //WebView创建完成时调用
             onWebViewCreated: (WebViewController webViewController) {
               _controller.complete(webViewController);
             },
+            //拦截请求
             navigationDelegate: (NavigationRequest request) {
-              var url = request.url;
+              //对于需要拦截的操作 做判断
+              if(request.url.startsWith("zhihu://")){
+                return NavigationDecision.prevent;
+              }
+              //不需要拦截的操作
               setState(() {
                 isLoading = true;
               });
               return NavigationDecision.navigate;
             },
+            //页面加载完成
             onPageFinished: (String url) {
               setState(() {
                 isLoading = false;
