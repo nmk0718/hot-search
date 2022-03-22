@@ -192,17 +192,17 @@ class DataController extends GetxController {
         },
       ]
     },
-    {
-      "website": "吾爱破解",
-      "icon": "https://avatar.52pojie.cn/images/noavatar_middle.gif",
-      "menu": [
-        {
-          "menuName": "今日热帖",
-          "menuUrl":
-              "https://www.52pojie.cn/misc.php?mod=ranklist&type=thread&view=heats&orderby=today"
-        },
-      ]
-    },
+    // {
+    //   "website": "吾爱破解",
+    //   "icon": "https://avatar.52pojie.cn/images/noavatar_middle.gif",
+    //   "menu": [
+    //     {
+    //       "menuName": "今日热帖",
+    //       "menuUrl":
+    //           "https://www.52pojie.cn/misc.php?mod=ranklist&type=thread&view=heats&orderby=today"
+    //     },
+    //   ]
+    // },
     {
       "website": "虎扑",
       "icon":
@@ -462,6 +462,9 @@ class DataController extends GetxController {
         }
         _hotsearchData.value = linkMap;
       }
+    }
+    else{
+      print('请求失败');
     }
   }
 }

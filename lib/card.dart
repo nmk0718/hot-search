@@ -60,6 +60,7 @@ class DataCardState extends State<DataCard> {
   }
 
   content(context, data) {
+    Color nowcolor = Theme.of(context).scaffoldBackgroundColor;
     var selecteddata =
         _dataController.websiteList[_dataController.tabindex.value];
     websitedata selectwebsite = websitedata.fromJson(selecteddata);
@@ -206,13 +207,13 @@ class DataCardState extends State<DataCard> {
                                       width: 20,
                                       child: Text(
                                         '${index + 1}',
-                                        style: TextStyle(height: 1.5),
+                                        style: TextStyle(height: 1.5,color: nowcolor == Color(0xfffafafa)?Colors.black:Colors.grey[500]),
                                       ),
                                     ),
                                     Expanded(
                                       child: Text(
                                         data[index]['title'],
-                                        style: TextStyle(height: 1.5),
+                                        style: TextStyle(height: 1.5,color: nowcolor == Color(0xfffafafa)?Colors.black:Colors.grey[500]),
                                       ),
                                     ),
                                   ],
@@ -231,6 +232,7 @@ class DataCardState extends State<DataCard> {
 
   @override
   Widget build(BuildContext context) {
+    Color nowcolor = Theme.of(context).scaffoldBackgroundColor;
     //通过公共的状态来显示卡片模式还是直接显示
     return Obx(() {
       List data = _dataController.hotsearchData;
@@ -242,7 +244,7 @@ class DataCardState extends State<DataCard> {
                   child: Container(
                     padding: EdgeInsets.only(left: 15, right: 15, top: 10),
                     decoration: new BoxDecoration(
-                      color: Colors.white,
+                      color: nowcolor == Color(0xfffafafa)?Colors.white:Colors.black26,
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
                       boxShadow: [
                         BoxShadow(
@@ -257,7 +259,7 @@ class DataCardState extends State<DataCard> {
                 )
               : Container(
                   padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-                  color: Colors.white,
+                  color:  nowcolor == Color(0xfffafafa)?Colors.white:Colors.black26,
                   child: content(context, data),
                 ),
           data == null || data.isEmpty

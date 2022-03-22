@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hot_search/model/websitedata.dart';
 import 'package:hot_search/setting.dart';
@@ -50,7 +51,6 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
-
     return Obx(() {
       return DefaultTabController(
           length: _dataController.websiteList.length,
@@ -61,23 +61,20 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                   appBar: AppBar(
                     elevation: 2,
                     centerTitle: true,
-                    title: Padding(
-                      padding: EdgeInsets.only(top: 5),
+                    title: Container(
                       child: Text(
                         '今日热搜',
-                        style: TextStyle(color: Color(0xFFFE1483)),
                       ),
                     ),
                     actions: [
                       Builder(builder: (BuildContext context) {
                         return GestureDetector(
                           child: Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Text(
-                              '···',
-                              style: TextStyle(
-                                  color: Color(0xFFFE1483), fontSize: 30),
-                            ),
+                            padding: EdgeInsets.only(right: 15),
+                          child: Text(
+                            '···',
+                            style: TextStyle(fontSize: 30),
+                          ),
                           ),
                           onTap: () {
                             Get.to(Setting(),
@@ -93,13 +90,10 @@ class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin 
                         );
                       }),
                     ],
-                    backgroundColor: Colors.white,
+                    // backgroundColor: Colors.white,
                     bottom: PreferredSize(
                       preferredSize: Size(double.infinity, 20),
                       child: TabBar(
-                          indicatorColor: Color(0xFFFE1483),
-                          labelColor: Color(0xFFFE1483),
-                          unselectedLabelColor: Colors.black54,
                           isScrollable: true,
                           indicatorSize: TabBarIndicatorSize.label,
                           tabs: TabList(),

@@ -38,7 +38,6 @@ class NewPageState extends State<NewPage> {
         centerTitle: true,
         title: Text(
           website,
-          style: TextStyle(color: Color(0xFFFE1483)),
         ),
         actions: [
           IconButton(
@@ -70,10 +69,7 @@ class NewPageState extends State<NewPage> {
                 }
               }),
         ],
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Color(0xFFFE1483),
-        ),
+        iconTheme: IconThemeData(),
       ),
       body: Stack(
         children: [

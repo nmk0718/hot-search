@@ -18,14 +18,10 @@ class ChangeSytleState extends State<ChangeSytle> {
         appBar: AppBar(
           elevation: 2,
           centerTitle: true,
-          iconTheme: IconThemeData(
-            color: Color(0xFFFE1483), //修改颜色
-          ),
+          iconTheme: IconThemeData(),
           title: Text(
-            '显示样式',
-            style: TextStyle(color: Color(0xFFFE1483)),
+            '视图样式',
           ),
-          backgroundColor: Colors.white,
         ),
         body: Obx(() {
           int modle =_dataController.model.value;

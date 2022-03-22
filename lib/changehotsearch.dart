@@ -66,22 +66,18 @@ class ChangeHotSearchState extends State<ChangeHotSearch> {
       appBar: AppBar(
         elevation: 2,
         centerTitle: true,
-        iconTheme: IconThemeData(
-          color: Color(0xFFFE1483), //修改颜色
-        ),
+        iconTheme: IconThemeData(),
         title: Text(
           '更改热搜',
-          style: TextStyle(color: Color(0xFFFE1483)),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.add, color: Color(0xFFFE1483)),
+            icon: Icon(Icons.add),
             onPressed: () async {
               Get.to(InsterWebsite(), transition: Transition.noTransition);
             },
           ),
         ],
-        backgroundColor: Colors.white,
       ),
       body:Obx((){
         return ReorderableListView(
@@ -106,7 +102,7 @@ class ChangeHotSearchState extends State<ChangeHotSearch> {
                       ),
                     ],
                   ),
-                  child: logo(websitedata.fromJson(s)),
+                  child: logo(websitedata.fromJson(s))
                 ),
               ),
               onDismissed: (direction) async {

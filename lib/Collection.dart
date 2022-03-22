@@ -13,14 +13,10 @@ class Collection extends StatelessWidget {
       appBar: AppBar(
         elevation: 2,
         centerTitle: true,
-        iconTheme: IconThemeData(
-          color: Color(0xFFFE1483), //修改颜色
-        ),
+        iconTheme: IconThemeData(),
         title: Text(
           '收藏',
-          style: TextStyle(color: Color(0xFFFE1483)),
         ),
-        backgroundColor: Colors.white,
       ),
       body: Container(
         padding: EdgeInsets.all(10),

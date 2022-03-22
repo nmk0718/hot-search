@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hot_search/Collection.dart';
 import 'package:hot_search/changestyle.dart';
+import 'package:hot_search/themecolor.dart';
+import 'about.dart';
 import 'changehotsearch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'fontsize.dart';
 import 'model/CollectionData.dart';
 
 class Setting extends StatefulWidget {
@@ -21,23 +24,20 @@ class SettingState extends State<Setting> {
       appBar: AppBar(
         elevation: 2,
         centerTitle: true,
-        iconTheme: IconThemeData(
-          color: Color(0xFFFE1483), //修改颜色
-        ),
+        iconTheme: IconThemeData(),
         leading: IconButton(icon: Icon(Icons.arrow_back),onPressed: (){
           Get.back(result: 'success');
         }),
         title: Text(
           '设置',
-          style: TextStyle(color: Color(0xFFFE1483)),
         ),
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
       ),
       body: Column(
         children: [
           ListView(
             shrinkWrap: true,
-            children: ListTile.divideTiles(context: context, tiles: [
+            children: ListTile.divideTiles(context: context,tiles: [
               ListTile(
                 leading: Icon(
                   Icons.auto_awesome,
@@ -78,10 +78,43 @@ class SettingState extends State<Setting> {
                   Icons.category,
                   color: Colors.lightBlueAccent,
                 ),
-                title: Text('显示样式'),
+                title: Text('视图样式'),
                 //更改卡片模式为直接显示
                 onTap: () {
                   Get.to(ChangeSytle(), transition: Transition.noTransition);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.color_lens_outlined,
+                  color: Colors.purple,
+                ),
+                title: Text('主题颜色'),
+                //更改卡片模式为直接显示
+                onTap: () {
+                  Get.to(ThemeColor(), transition: Transition.noTransition);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.translate,
+                  color: Colors.green,
+                ),
+                title: Text('字体大小'),
+                //更改卡片模式为直接显示
+                onTap: () {
+                  Get.to(FontSize(), transition: Transition.noTransition);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.person_outline,
+                  color: Colors.pinkAccent,
+                ),
+                title: Text('关于'),
+                //更改卡片模式为直接显示
+                onTap: () {
+                  Get.to(About(), transition: Transition.noTransition);
                 },
               ),
             ]).toList(),
